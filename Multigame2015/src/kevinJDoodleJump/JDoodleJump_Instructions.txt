@@ -1,0 +1,232 @@
+ Instructions for MultiGameUprite2015 JDoodleJump 
+
+  -----------------------------------------------------------------------
+ 
+ Task 0
+ rename the package for your game with the following naming convention
+   nameJDoodleJump
+   (replace 'name' with your name(s) in lower case
+    followed by JDoodleJump .. no spaces)
+ rename the file (and edit the image if you want):
+   yournamesJDoodleJump.jpg in the menuimages package
+   to the same name as your package with the .jpg extension
+ 
+ compile and run MultiGameRunner...
+ select your game (arrow keys) ...
+ launch it (6 key) ...
+ play your game (use the right arrow key) ...
+    
+  -----------------------------------------------------------------------
+    
+ Task 1
+ in class JDoodleJump:
+ declare an instance variable (a field) called viewport1,
+ that will be of type Rectangle and its dimensions must be 
+   ... screen.width/2 by screen.height/2 ...
+ make sure to choose appropriate coordinates so it is centered in the window
+  
+ create a method getViewport1 that 
+ returns variable viewport1 
+ (  note: later there will be a getViewport2  )
+  
+ in method gameRender()
+   render viewport1 in LIGHT_GRAY with a BLACK border for all GameStates
+   ( hint: use g.fill and g.draw )
+  
+ (you should see a gray Rectangle as your game viewport1)
+ 
+  -----------------------------------------------------------------------
+  
+ Task 2a  (create a Doodle)
+ create a new class called Doodle in your package
+ take some time to consider what kinds of fields and methods it should have
+ (recall: every Object in Java has state and behavior..
+  what does a Doodle have and what can a Doodle do)
+  
+ - - - - BREAK - - - - 
+ 
+ private JDoodleJump dj; // reference to client for public methods
+ private int playerNum; // either 1 or 2
+ private Rectangle2D.Double body; // hit box for Doodle
+ private Rectangle vp; // convenient reference to the viewport
+  
+ write a constructor that takes an int parameter for the player number
+ and a JDoodleJump dj parameter initialized like this:  this.dj = dj;
+ 
+ (NOTE: now and Doodle will have access to any public methods
+  and protected fields of the JDoodleJump class)
+ 
+ Now,  initialize all fields in the constructor
+ the rectangular body must be 64x100 
+ (approx 10% of the  viewport dimensions)
+ and  positioned just with body.y at the center of the viewport1
+ 
+ 
+ write method:  public void render(Graphics2D g) 
+ render the Doodle as a filled cyan Rectangle
+ 
+ run the game
+ 
+ -----------------------------------------------------------------------
+ 
+ Task 2b || !2b  
+ in class JDoodleJump:
+ 
+ create an instance variable ..   private Doodle dood1;
+ in method initRound() .. assign a new instance of Doodle to variable dood1
+   with appropriate parameters
+ 
+ in method gameRender()
+   invoke the render method of dood1 for all GameStates
+ 
+ ( you should see the dood1 on the screen )
+ 
+ -----------------------------------------------------------------------
+ 
+ Task 2c 
+ in class Doodle:
+ 
+ render Doodle as an image
+ (use doodLeft.png or doodRight.png)
+
+ look in Copter.java in package ruthHeligame
+ specifically at lines 38,66-70,131
+ 
+ ( you should see the dood1 on the screen )
+ 
+ -----------------------------------------------------------------------
+  
+ Task 3a (move horizontally)
+ in class Doodle:
+  
+ write a void method called move()
+ create double instance variables xVel, xAccel, xDamp, maxXVel,
+ and assign appropriate non-zero values to them.
+ 
+ move the Doodle left or right using the acceleration model
+ used in Escape From Rectangulus
+   xVel += xAccel and body.x += xVel ... etc.
+ 
+ create instance variable KeyHandler kh and
+ initialize kh in the constructor
+ this.kh = dj.getKeyHandler(); 
+  
+ ( you should be able to move the Doodle left and right )
+ 
+ write code in the move method to have the Doodle wrap 
+ .. appear on the other side if more than half its body
+ is out of the viewport ..
+ 
+  -----------------------------------------------------------------------
+  
+ Task 3b
+ in class JDoodleJump:
+ 
+ invoke the move method on dood1 in the playing and dead states
+ change message to "" in states PLAYING and DEAD
+ 
+ -----------------------------------------------------------------------
+ 
+ 
+ Task 4
+ create an abstract class called Obstacle
+   (classes like Platform, BreakingPlatform, PlatformWithSpring etc. 
+    will all extend Obstacle)
+  
+ in class Obstacle:
+ declare an instance variable body (like in Doodle)
+ write methods getBody() and  setBody(int x, int y, int w, int h)
+ declare an abstract method called render 
+   public abstract void render(Graphics2D g);
+ 
+ write method
+ public void move(Doodle dood) 
+ get the surplus yVel from dood and move the body down that amount 
+ 
+ write method
+ public abstract void render(Graphics2D g);
+ 
+ -----------------------------------------------------------------------
+ 
+ Task 4b
+ create a class called Platform that extends Obstacle
+ 
+ in class Platform:
+ write the constructor 
+ with int x, int y , JDoodleJump dj parameters
+ call the setBody method inherited from Obstacle
+ 
+ override the draw method to render body using "greenPlatform.png"
+ (dimension 128x32)
+ -----------------------------------------------------------------------
+
+ Task 4c
+ in class JDoodleJump
+ private ArrayList<Obstacle> obstacles1;
+ in method init()
+   .. write code to add 1000 new Platforms to obstacles1 ..
+ 
+ write appropriate code in gameUpdate() and in gameRender()
+   to move and render the Obstacles in obstacles1
+ 
+ -----------------------------------------------------------------------
+  
+ Task 5a
+ in class Doodle:
+ 
+ in method move() have the Doodle fall with gravity
+ 
+ create instance variables yVel, gravity and surplusYVel
+ and method getSurplusYVel
+ 
+ NOTE: body.y will have an upper bound at the viewport center
+ 
+ 
+ if yVel is negative or 0 (moving down), 
+   set surplusYVel to zero ..
+   body.y is decreased by yVel ..
+   decrease yVel by gravity
+ 
+ 
+ else // yVel is positive (moving up)
+   if the body.y - yVel above the viewport center
+   (recall: viewport center is the upper bound for Doodle)
+     set body.y to the viewport center
+     decrease yVel by gravity
+     set surplusYVel to yVel
+   otherwise 
+     just decrease body.y and yVel appropriately and
+     set surplusYVel to zero
+     
+ write a method public void jumpPlatform(Platform p)
+   if the Doodle is moving down 
+      and body is sufficiently above the body of p
+      and body intersects the body of p, set yVel to 
+      some positive value like 5.0
+      and decrease body.y by yVel
+      
+ -----------------------------------------------------------------------
+  
+ Task 5b
+ in class JDoodleJump:
+ 
+ in method gameUpdate() .. PLAYING state ..
+ write a loop to call method move 'for each' Obstacle in obstacles1
+ and call the jumpPlatform method for those Platforms in obstacles1 that are below 
+ that are below the viewport center
+ 
+ also, check if the first Obstacle in the List is below the viewport,
+ if so, remove it from the List
+ 
+ write code in gameRender to render each Obstacle in obstacles1
+ 
+-----------------------------------------------------------------------
+  
+ Task 6
+ 
+ in class JDoodleJump:
+ 
+ display a score to the viewport
+ (the total of the surplusYVel each update)
+ 
+ 
