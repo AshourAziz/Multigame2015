@@ -8,24 +8,6 @@ import java.util.Random;
 import multigame.*;
 import static masoodashourSnakeGame.GameState.*;
 
-//testing on irc
-
-/**
- * simple template for a MultiGameUprite2015 for uprite cabinet
- */
-
-/**
- * 
- * 
- * 
- * SOMETHING ABOUT RESPAWNING THE snek2
- * 
- * 
- * 
- * 
- * @author masabb1
- *
- */
 public class SnakeGame implements Game {
 
 	String message1 = "";
@@ -86,6 +68,7 @@ public class SnakeGame implements Game {
 	private int counter3 = 0;
 	private int tokens = 2;
 	private int whowon = 0;
+	private int menuMessageXPos = 0;
 
 	/**
 	 * Our array lists, please see top of construct for more usage
@@ -96,20 +79,16 @@ public class SnakeGame implements Game {
 	ArrayList<Integer> modesForNips;
 	ArrayList<Integer> modesForPvp;
 
-	/**
-	 * A Game class must have only one constructor and it must have exactly one
-	 * MultiGame parameter.<br>
-	 * Initialize all instance variables.
-	 */
 	public SnakeGame(MultiGame mg) {
-		menuSnek = new snek(620, 480, 3, 0);
-		/**
-		 * let's create a list for the gamemodes that snek1 and snek2 should be
-		 * used for this will allow us to easily add more gamemodes making this
-		 * a BAD BAD BAD BAD ASS MODULE SYSTEM
-		 * 
-		 */
 
+		/**
+		 * Create the menu snek
+		 */
+		menuSnek = new snek(620, 480, 3, 0);
+
+		/**
+		 * creates the 4 boxes for menu
+		 */
 		box1 = new Rectangle(borderPosX - 27, 445, 50, 100);
 		box2 = new Rectangle(borderPosX + borderPosWidth - 20, 445, 50, 100);
 		box3 = new Rectangle(borderPosWidth - 27, 250, 100, 50);
@@ -117,6 +96,13 @@ public class SnakeGame implements Game {
 				50);
 
 		gmrec1 = new Rectangle(50, 50, 50, 50);
+
+		/**
+		 * let's create a list for the gamemodes that snek1 and snek2 should be
+		 * used for this will allow us to easily add more gamemodes making this
+		 * a BAD BAD BAD BAD ASS MODULE SYSTEM
+		 * 
+		 */
 		modesForSnek1 = new ArrayList<Integer>();
 		modesForSnek1.addAll(Arrays.asList(1, 2, 3, 4));
 		modesForSnek2 = new ArrayList<Integer>();
@@ -194,6 +180,14 @@ public class SnakeGame implements Game {
 		if (gameState.inState(MENU)) {
 			if (gameState.getCurTick() == 1) {
 				menuSnek = new snek(500, 500, 3, 0);
+				/**
+				 * So the flashing colors start in the center every time
+				 */
+				messageYMovement = 400;
+				messageYMovement3 = 600;
+				messageYMovement4 = 600;
+				messageYMovement5 = 600;
+				messageYMovement6 = 600;
 			}
 
 			// 320, 275, 600, 448
@@ -649,13 +643,14 @@ public class SnakeGame implements Game {
 			 * FLASHING COLORS
 			 * 
 			 */
-
+//menuMessageXPos
 			if (gameState.getCurTick() % 10 == 0) {
 
 				if (fontsize < 24) {
 					fontsize++;
+					
 				} else {
-					for (int i = 0; i < 12; i++) {
+					for (int i = 0; i < 24 && i > 5; i++) {
 						i = fontsize;
 					}
 				}
