@@ -10,34 +10,15 @@ import static masoodashourSnakeGame.GameState.*;
 
 //testing
 
-
 /**
  * simple template for a MultiGameUprite2015 for uprite cabinet
  */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * 
  * 
  * 
- * SOMETHING ABOUT RESPAWNING THE snek2 
+ * SOMETHING ABOUT RESPAWNING THE snek2
  * 
  * 
  * 
@@ -325,7 +306,6 @@ public class SnakeGame implements Game {
 			if (gameMode == 1) {
 				snek1 = new snek(500, 500, 1, 1);
 				canDrawSnek1 = true;
-				snek1IsDead = false;
 				waitingOnResponse = false;
 				if (gameState.getCurMaxTicks() % 150 == 0) {
 					gameState.toState(PLAYING);
@@ -387,9 +367,9 @@ public class SnakeGame implements Game {
 				 * what the hey
 				 */
 
-				if (snek1IsDead == false || snek1.isDead() == false) {
+				if (snek1IsDead == false) {
 					snek1.move();
-					
+
 				}
 				if (modesForSnek2.contains(gameMode) && snek2IsDead == false) {
 					snek2.move();
@@ -518,12 +498,8 @@ public class SnakeGame implements Game {
 						if (snek1IsDead == true && snek2IsDead == true) {
 							System.out
 									.println("Debugging here, Error: Death-005");
-							if (gameState.getCurTick() % 750 == 0) {
-								System.out
-										.println("Debugging here, Error: Death-001");
-								gameState.toState(DEAD);
 
-							}
+							gameState.toState(DEAD);
 
 						}
 					} else {
@@ -558,6 +534,10 @@ public class SnakeGame implements Game {
 				if (gameState.getCurTick() > 450) {
 					tokens--;
 					gameMode = 0;
+					canDrawSnek1 = false;
+					canDrawSnek2 = false;
+					snek1IsDead = false;
+					snek2IsDead = false;
 					gameState.toState(MENU);
 
 				}
@@ -807,17 +787,10 @@ public class SnakeGame implements Game {
 					|| snek1.head.x < border.getMinX()
 					|| snek1.head.y < border.getMinY()
 					|| snek1.head.y > border.getMaxY()) {
-				if (modesForSnek2.contains(gameMode)) {
-					snek1IsDead = true;
-					System.out
-							.println("Debugging, Snek1 intersect border: Error-001");
-					// snek1IsDead = true;
-				} else {
-					System.out
-							.println("Debugging here, Error: intersection-002");
-					gameState.toState(DEAD);
 
-				}
+				System.out.println("Debugging here, Error: intersection-002");
+				snek1IsDead = true;
+
 			}
 
 			/**
