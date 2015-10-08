@@ -41,7 +41,7 @@ public class SnakeGame implements Game {
 	private KeyHandler kh;
 	private boolean gameOver;
 	private MultiGame mg;
-
+	Color dead = new Color(133, 133, 133);
 	private int borderPosX = 320;
 	private int borderPosY = 275;
 	private int borderPosWidth = 600;
@@ -84,7 +84,8 @@ public class SnakeGame implements Game {
 	private Rectangle gmrec4;
 	private int counter2 = 0;
 	private int counter3 = 0;
-	private int tokens = 3;
+	private int tokens = 2;
+	private int whowon = 0;
 
 	/**
 	 * Our array lists, please see top of construct for more usage
@@ -311,8 +312,8 @@ public class SnakeGame implements Game {
 					gameState.toState(PLAYING);
 				}
 			} else if (gameMode == 2) {
-				snek1 = new snek(100, 100, 1, 2);
-				snek2 = new snek(500, 500, 1, 2);
+				snek1 = new snek(100, 500, 1, 2);
+				snek2 = new snek(700, 500, 2, 2);
 				canDrawSnek1 = true;
 				canDrawSnek2 = true;
 				waitingOnResponse = false;
@@ -321,7 +322,7 @@ public class SnakeGame implements Game {
 				}
 			} else if (gameMode == 3) {
 				snek1 = new snek(100, 100, 1, 3);
-				snek2 = new snek(500, 100, 1, 3);
+				snek2 = new snek(500, 100, 2, 3);
 				canDrawSnek1 = true;
 				canDrawSnek2 = true;
 				waitingOnResponse = false;
@@ -331,7 +332,7 @@ public class SnakeGame implements Game {
 				;
 			} else if (gameMode == 4) {
 				snek1 = new snek(100, 100, 1, 4);
-				snek2 = new snek(500, 500, 1, 4);
+				snek2 = new snek(500, 500, 2, 4);
 				canDrawSnek1 = true;
 				canDrawSnek2 = true;
 				waitingOnResponse = false;
@@ -504,13 +505,12 @@ public class SnakeGame implements Game {
 						}
 					} else {
 						if (snek1IsDead == true) {
+							// System.out
+							// .println("Debugging here, Error: Death-006");
+
 							System.out
-									.println("Debugging here, Error: Death-006");
-							if (gameState.getCurTick() % 750 == 0) {
-								System.out
-										.println("Debugging here, Error: Death-003");
-								gameState.toState(DEAD);
-							}
+									.println("Debugging here, Error: Death-003");
+							gameState.toState(DEAD);
 
 						}
 					}
@@ -593,7 +593,7 @@ public class SnakeGame implements Game {
 			g.fill(box3);
 			// g.draw(box4);
 			g.fill(box4);
-			menuSnek.draw(g, 3);
+			menuSnek.draw(g, 3, Color.YELLOW);
 			if (gameState.getCurTick() % 10 == 0) {
 
 				if (fontsize < 26) {
@@ -744,7 +744,8 @@ public class SnakeGame implements Game {
 			 * had to ;-;
 			 */
 			if (modesForSnek1.contains(gameMode)) {
-				snek1.draw(g, 1);
+				snek1.draw(g, 1, Color.GREEN);
+
 			} else {
 				canDrawSnek1 = canDrawSnek1;
 			}
@@ -756,7 +757,7 @@ public class SnakeGame implements Game {
 			if (modesForSnek2.contains(gameMode)) {
 
 				if (canDrawSnek2 = true) {
-					snek2.draw(g, 2);
+					snek2.draw(g, 2, Color.RED);
 				} else {
 					canDrawSnek2 = canDrawSnek2;
 				}
@@ -789,6 +790,7 @@ public class SnakeGame implements Game {
 					|| snek1.head.y > border.getMaxY()) {
 
 				System.out.println("Debugging here, Error: intersection-002");
+
 				snek1IsDead = true;
 
 			}
@@ -882,11 +884,8 @@ public class SnakeGame implements Game {
 			g.drawString(message, 600 + messagePos.x, 400);
 
 		} else if (gameState.inState(DEAD)) {
-			if (modesForSnek1.contains(gameMode)) {
-				snek1.draw(g, 1);
-			} else {
-				canDrawSnek1 = canDrawSnek1;
-			}
+
+			snek1.draw(g, 1, dead);
 
 			/**
 			 * If our gamemode is 2,3,4 which will need snek2 then let's draw
@@ -895,7 +894,10 @@ public class SnakeGame implements Game {
 			if (modesForSnek2.contains(gameMode)) {
 
 				if (canDrawSnek2 = true) {
-					snek2.draw(g, 2);
+					if (whowon == 2) {
+						snek2.draw(g, 2, dead);
+
+					}
 				} else {
 					canDrawSnek2 = canDrawSnek2;
 				}

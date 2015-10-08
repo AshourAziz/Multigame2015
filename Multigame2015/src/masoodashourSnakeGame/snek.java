@@ -26,7 +26,13 @@ public class snek {
 		gm = gameMode;
 		pn = playerNum;
 		size = 8;
-		direction = 2;
+		if (playerNum == 1) {
+			direction = 6;
+		}
+		if (playerNum == 2) {
+			direction = 4;
+		}
+
 		// 10
 		bodyAdd = 30;
 		head = new Rectangle(x, y, size, size);
@@ -111,16 +117,13 @@ public class snek {
 
 	}
 
-	public void draw(Graphics2D g, int playerNum) {
-		if (playerNum == 1) {
-			g.setColor(Color.GREEN);
-		}
-		if (playerNum == 2) {
-			g.setColor(Color.RED);
-		}
-		if (playerNum == 3) {
-			g.setColor(Color.YELLOW);
-		}
+	public void setColor(Graphics2D g, Color c) {
+		g.setColor(c);
+	}
+
+	public void draw(Graphics2D g, int playerNum, Color c) {
+
+		g.setColor(c);
 
 		g.draw(head);
 
