@@ -14,6 +14,7 @@ import static masoodashourSnakeGame.GameState.*;
 // tron - If tron no nibbles and no minus body
 public class snek {
 	int size;
+	
 	int direction;
 	int bodyAdd;
 	Rectangle head;
@@ -68,6 +69,7 @@ public class snek {
 			directionQ.remove(0);
 
 		}
+		
 
 		if (direction == 4) {
 			head.x -= size;

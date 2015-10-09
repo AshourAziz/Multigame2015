@@ -204,8 +204,8 @@ public class SnakeGame implements Game {
 			borderPosHeight = 448;
 			message1 = "- Welcome -";
 			message3 = "For single player Go left ";
-			message4 = "for multiplyer Co-Op go up ";
-			message5 = "for competitive Co-Op go right ";
+			message4 = "for multiplyer Casual go up ";
+			message5 = "for multiplayer competitive go right ";
 			message6 = "and for TRON go down";
 
 			if (menuSnek.head.intersects(box1)
@@ -308,44 +308,70 @@ public class SnakeGame implements Game {
 				snek1 = new snek(500, 500, 1, 1);
 				canDrawSnek1 = true;
 				waitingOnResponse = false;
-				if (gameState.getCurMaxTicks() % 150 == 0) {
-					gameState.toState(PLAYING);
-				}
+
 			} else if (gameMode == 2) {
 				snek1 = new snek(100, 500, 1, 2);
-				snek2 = new snek(700, 500, 2, 2);
+				snek2 = new snek(1200, 500, 2, 2);
 				canDrawSnek1 = true;
 				canDrawSnek2 = true;
 				waitingOnResponse = false;
-				if (gameState.getCurMaxTicks() % 150 == 0) {
-					gameState.toState(PLAYING);
-				}
+
 			} else if (gameMode == 3) {
-				snek1 = new snek(100, 100, 1, 3);
-				snek2 = new snek(500, 100, 2, 3);
+				snek1 = new snek(100, 500, 1, 3);
+				snek2 = new snek(1200, 500, 2, 3);
 				canDrawSnek1 = true;
 				canDrawSnek2 = true;
 				waitingOnResponse = false;
-				if (gameState.getCurMaxTicks() % 150 == 0) {
-					gameState.toState(PLAYING);
-				}
-				;
+
 			} else if (gameMode == 4) {
-				snek1 = new snek(100, 100, 1, 4);
-				snek2 = new snek(500, 500, 2, 4);
+				snek1 = new snek(100, 500, 1, 4);
+				snek2 = new snek(1200, 500, 2, 4);
 				canDrawSnek1 = true;
 				canDrawSnek2 = true;
 				waitingOnResponse = false;
-				if (gameState.getCurMaxTicks() % 150 == 0) {
-					gameState.toState(PLAYING);
-				}
 
 			}
 			// snek1.directionQ.clear();
 			// snek1.setDirection(2);
 
+			/**
+			 * Messages for current game
+			 * 
+			 */
+			if (gameMode == 1) {
+				currentGame = "You are now playing SINGLE PLAYER";
+
+			} else if (gameMode == 2) {
+
+				currentGame = "You are now playing CASUAL";
+
+			} else if (gameMode == 3) {
+
+				currentGame = "You are now playing COMPETITIVE ";
+
+			} else if (gameMode == 4) {
+				currentGame = "You are now playing TRON";
+
+			} else if (kh.wasRightJustPressed(1)) {
+				messagePos.x += 5;
+			}
+
 			// move snakes here
-			System.out.println(snek1.direction);
+
+			if (gameState.getCurTick() > 440) {
+
+				kh.wasUpJustPressed(1);
+				kh.wasDownJustPressed(1);
+				kh.wasLeftJustPressed(1);
+				kh.wasRightJustPressed(1);
+
+				kh.wasUpJustPressed(2);
+				kh.wasDownJustPressed(2);
+				kh.wasLeftJustPressed(2);
+				kh.wasRightJustPressed(2);
+
+			}
+
 			if (gameState.getCurTick() == 1) {
 				initRound();
 			}
@@ -357,6 +383,28 @@ public class SnakeGame implements Game {
 				kh.wasDownJustPressed(1);
 				kh.wasLeftJustPressed(1);
 				kh.wasRightJustPressed(1);
+
+				kh.wasUpJustPressed(2);
+				kh.wasDownJustPressed(2);
+				kh.wasLeftJustPressed(2);
+				kh.wasRightJustPressed(2);
+
+			}
+
+			if (gameMode == 4) {
+				if (kh.isBtn1Pressed(1)) {
+					if (gameState.getCurTick() % 4 == 0) {
+						snek1.move();
+					}
+
+				}
+				if (kh.isBtn1Pressed(2)) {
+					if (gameState.getCurTick() % 4 == 0) {
+						snek2.move();
+
+					}
+
+				}
 
 			}
 			counter3++;
@@ -380,7 +428,7 @@ public class SnakeGame implements Game {
 					for (int i = 0; i < snek2.body.size(); i++) {
 						if (i < snek2.body.size()) {
 							if (snek1.head.intersects(snek2.body.get(i))) {
-								gameState.toState(DEAD);
+								snek1IsDead = true;
 
 							}
 						} else {
@@ -392,7 +440,7 @@ public class SnakeGame implements Game {
 					for (int a = 0; a < snek1.body.size(); a++) {
 						if (a < snek1.body.size()) {
 							if (snek2.head.intersects(snek1.body.get(a))) {
-								gameState.toState(DEAD);
+								snek2IsDead = true;
 
 							}
 
@@ -438,28 +486,6 @@ public class SnakeGame implements Game {
 				if (kh.wasUpJustPressed(2)) {
 					snek2.setDirection(8);
 				}
-			}
-
-			/**
-			 * Messages
-			 * 
-			 */
-			if (gameMode == 1) {
-				currentGame = "You are now playing SINGLE PLAYER";
-
-			} else if (gameMode == 2) {
-
-				currentGame = "You are now playing CO-OP";
-
-			} else if (gameMode == 3) {
-
-				currentGame = "You are now playing COMPETITIVE CO-OP";
-
-			} else if (gameMode == 4) {
-				currentGame = "You are now playing TRON";
-
-			} else if (kh.wasRightJustPressed(1)) {
-				messagePos.x += 5;
 			}
 
 			// ****************************************************
@@ -672,6 +698,74 @@ public class SnakeGame implements Game {
 			g.setFont(new Font("Dialog", Font.PLAIN, 12));
 			g.drawString(message, 300, 400);
 
+			/**
+			 * They all need player 1 But I was getting a null pointer So I just
+			 * had to ;-;
+			 */
+			if (modesForSnek1.contains(gameMode)) {
+				snek1.draw(g, 1, Color.GREEN);
+
+			} else {
+				canDrawSnek1 = canDrawSnek1;
+			}
+
+			/**
+			 * If our gamemode is 2,3,4 which will need snek2 then let's draw
+			 * him.
+			 */
+			if (modesForSnek2.contains(gameMode)) {
+
+				if (canDrawSnek2 = true) {
+					snek2.draw(g, 2, Color.RED);
+				} else {
+					canDrawSnek2 = canDrawSnek2;
+				}
+			}
+			/**
+			 * FLASHING COLORS
+			 * 
+			 */
+			// menuMessageXPos
+			if (gameState.getCurTick() % 10 == 0) {
+
+				if (fontsize < 24) {
+					fontsize++;
+
+				} else {
+					for (int i = 0; i < 24 && i > 5; i++) {
+						i = fontsize;
+					}
+				}
+
+				if (messageYMovement > 25) {
+					messageYMovement -= 10;
+				}
+
+				if (xPosMessage2 > 700) {
+					forward2 = false;
+					// System.out.println("1");
+				}
+				if (xPosMessage2 < 400) {
+					forward2 = true;
+					// System.out.println("2");
+				}
+				if (forward2) {
+					xPosMessage2 += 10;
+					// System.out.println("3");
+
+				}
+				if (!forward2) {
+					xPosMessage2 -= 10;
+					// System.out.println("4");
+				}
+
+			}
+			g.setColor(rainbow);
+			g.setFont(new Font("Dialog", Font.PLAIN, fontsize));
+
+			g.drawString(currentGame, xPosMessage2 - fontsize * 2,
+					messageYMovement);
+
 		} else if (gameState.inState(PLAYING)) {
 			/**
 			 * FLASHING COLORS
@@ -692,8 +786,7 @@ public class SnakeGame implements Game {
 				if (messageYMovement > 25) {
 					messageYMovement -= 10;
 				}
-				
-				
+
 				if (xPosMessage2 > 700) {
 					forward2 = false;
 					// System.out.println("1");
@@ -716,7 +809,8 @@ public class SnakeGame implements Game {
 			g.setColor(rainbow);
 			g.setFont(new Font("Dialog", Font.PLAIN, fontsize));
 
-			g.drawString(currentGame, xPosMessage2 - fontsize * 2, messageYMovement);
+			g.drawString(currentGame, xPosMessage2 - fontsize * 2,
+					messageYMovement);
 
 			// System.out.println(" " + messageYMovement);
 
@@ -739,37 +833,6 @@ public class SnakeGame implements Game {
 					snek2IsDead = true;
 				}
 			}
-
-			/**
-			 * Meant for co-op if you hit someone else //
-			 */
-
-			/*
-			 * 
-			 * // The above will check if this is a PvP game option, and if it
-			 * // is it'll make sure BOTH snek bodies are ATLEAST 2 so we don't
-			 * // get a out of bounds error
-			 * 
-			 * for (int a = 1; a < gameState.getCurTick() + 500; a++) { // ^^^
-			 * We will use this for loop to loop and check if // each // ^^^
-			 * head is intersecting with another body
-			 * 
-			 * /** This first If statement will check if snek1 HIT snek2
-			 * 
-			 * if (snek1.head.intersects(snek2.body.get(a))) { snek1.move();
-			 * snek1.move(); snek1.move();
-			 * System.out.println("Debugging, Intersection Error-001");
-			 * gameState.toState(DEAD);
-			 * 
-			 * } /** This if statement will check if snek2 HIT snek1
-			 * 
-			 * if (snek2.head.intersects(snek1.body.get(a))) { snek2.move();
-			 * snek2.move(); snek2.move();
-			 * System.out.println("Debugging, Intersection Error-002");
-			 * gameState.toState(DEAD);
-			 * 
-			 * } }
-			 */
 
 			/**
 			 * If our GameMode is equal to 1,2,3 which are the game modes that
@@ -931,7 +994,13 @@ public class SnakeGame implements Game {
 
 		} else if (gameState.inState(DEAD)) {
 
-			snek1.draw(g, 1, dead);
+			System.out.println("Snek1: " + snek1IsDead + "Snek2: "
+					+ snek2IsDead);
+			if (snek1IsDead) {
+				snek1.draw(g, 1, dead);
+			} else {
+				snek1.draw(g, 1, rainbow);
+			}
 
 			/**
 			 * If our gamemode is 2,3,4 which will need snek2 then let's draw
@@ -940,10 +1009,16 @@ public class SnakeGame implements Game {
 			if (modesForSnek2.contains(gameMode)) {
 
 				if (canDrawSnek2 = true) {
-					if (whowon == 2) {
-						snek2.draw(g, 2, dead);
-
+					if (snek2IsDead) {
+						snek2.draw(g, 1, dead);
+					} else {
+						snek2.draw(g, 1, rainbow);
 					}
+
+					// if (whowon == 2) {
+					// snek2.draw(g, 2, dead);
+					//
+					// }
 				} else {
 					canDrawSnek2 = canDrawSnek2;
 				}
