@@ -69,6 +69,11 @@ public class SnakeGame implements Game {
 	private int tokens = 2;
 	private int whowon = 0;
 	private int menuMessageXPos = 0;
+	private int xPosMessage1 = 500;
+	private boolean forward = true;
+	private int xPosMessage2 = 500;
+	private boolean forward2 = true;
+	Color rainbow;
 
 	/**
 	 * Our array lists, please see top of construct for more usage
@@ -188,6 +193,7 @@ public class SnakeGame implements Game {
 				messageYMovement4 = 600;
 				messageYMovement5 = 600;
 				messageYMovement6 = 600;
+				forward = true;
 			}
 
 			// 320, 275, 600, 448
@@ -559,6 +565,14 @@ public class SnakeGame implements Game {
 
 	public void gameRender(Graphics2D g) {
 
+		if (gameState.getCurTick() % 20 == 0) {
+			Random random = new Random();
+			final float hue = random.nextFloat();
+			final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
+			final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
+			rainbow = Color.getHSBColor(hue, saturation, luminance);
+		}
+
 		if (modesForNips.contains(gameMode) && canDrawNip == false) {
 			nip = new Nip(xpos * 8 + 4, ypos * 8);
 			canDrawNip = true;
@@ -620,14 +634,34 @@ public class SnakeGame implements Game {
 
 			}
 
-			g.setColor(Color.ORANGE);
+			g.setColor(rainbow);
 			g.setFont(new Font("Dialog", Font.PLAIN, 30));
-			g.drawString(message1, 500, 100);
+			if (messageYMovement6 < 181) {
+
+				if (xPosMessage1 > 600) {
+					forward = false;
+					// System.out.println("1");
+				}
+				if (xPosMessage1 < 500) {
+					forward = true;
+					// System.out.println("2");
+				}
+				if (forward) {
+					xPosMessage1++;
+					// System.out.println("3");
+
+				}
+				if (!forward) {
+					xPosMessage1--;
+					// System.out.println("4");
+				}
+			}
+			g.drawString(message1, xPosMessage1, 100);
 			g.setFont(new Font("Dialog", Font.PLAIN, fontsize));
-			g.drawString(message3, 500, messageYMovement3);
-			g.drawString(message4, 500, messageYMovement4);
-			g.drawString(message5, 500, messageYMovement5);
-			g.drawString(message6, 500, messageYMovement6);
+			g.drawString(message3, xPosMessage1, messageYMovement3);
+			g.drawString(message4, xPosMessage1, messageYMovement4);
+			g.drawString(message5, xPosMessage1, messageYMovement5);
+			g.drawString(message6, xPosMessage1, messageYMovement6);
 
 		} else if (gameState.inState(READY)) {
 
@@ -643,12 +677,12 @@ public class SnakeGame implements Game {
 			 * FLASHING COLORS
 			 * 
 			 */
-//menuMessageXPos
+			// menuMessageXPos
 			if (gameState.getCurTick() % 10 == 0) {
 
 				if (fontsize < 24) {
 					fontsize++;
-					
+
 				} else {
 					for (int i = 0; i < 24 && i > 5; i++) {
 						i = fontsize;
@@ -658,15 +692,32 @@ public class SnakeGame implements Game {
 				if (messageYMovement > 25) {
 					messageYMovement -= 10;
 				}
+				
+				
+				if (xPosMessage2 > 700) {
+					forward2 = false;
+					// System.out.println("1");
+				}
+				if (xPosMessage2 < 400) {
+					forward2 = true;
+					// System.out.println("2");
+				}
+				if (forward2) {
+					xPosMessage2 += 10;
+					// System.out.println("3");
+
+				}
+				if (!forward2) {
+					xPosMessage2 -= 10;
+					// System.out.println("4");
+				}
 			}
 
-			g.setColor(Color.RED);
+			g.setColor(rainbow);
 			g.setFont(new Font("Dialog", Font.PLAIN, fontsize));
-			if (gameState.getCurTick() % 5 == 0) {
 
-			} else {
-				g.drawString(currentGame, 500 - fontsize * 2, messageYMovement);
-			}
+			g.drawString(currentGame, xPosMessage2 - fontsize * 2, messageYMovement);
+
 			// System.out.println(" " + messageYMovement);
 
 			/**
