@@ -354,6 +354,11 @@ public class SnakeGame implements Game {
 
 		} else if (gameState.inState(PLAYING)) {
 
+			/**
+			 * clears any key presses before the game started I.E the countdown
+			 * period and during the menu state.
+			 * 
+			 */
 			if (gameState.getCurTick() == 1) {
 				kh.wasUpJustPressed(1);
 				kh.wasDownJustPressed(1);
@@ -583,6 +588,10 @@ public class SnakeGame implements Game {
 		g.draw(border);
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(1));
+		
+		/**
+		 * These boxes are the ones that create the entrences into the gamemode selection
+		 */
 		if (gameState.inState(MENU)) {
 
 			g.setColor(Color.BLACK);
@@ -594,7 +603,13 @@ public class SnakeGame implements Game {
 			g.fill(box3);
 			// g.draw(box4);
 			g.fill(box4);
+			
+			//create menu snake
 			menuSnek.draw(g, 3, Color.YELLOW);
+			/**
+			 * Flashing color and moving color system.
+			 */
+			
 			if (gameState.getCurTick() % 10 == 0) {
 
 				if (fontsize < 26) {
