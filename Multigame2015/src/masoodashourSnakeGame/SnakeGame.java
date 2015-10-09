@@ -70,6 +70,7 @@ public class SnakeGame implements Game {
 	private int whowon = 0;
 	private int menuMessageXPos = 0;
 	private int xPosMessage1 = 500;
+	private int countdown = 3;
 	private boolean forward = true;
 	private int xPosMessage2 = 500;
 	private boolean forward2 = true;
@@ -194,6 +195,7 @@ public class SnakeGame implements Game {
 				messageYMovement5 = 600;
 				messageYMovement6 = 600;
 				forward = true;
+				countdown = 3;
 			}
 
 			// 320, 275, 600, 448
@@ -389,6 +391,30 @@ public class SnakeGame implements Game {
 				kh.wasLeftJustPressed(2);
 				kh.wasRightJustPressed(2);
 
+			}
+
+			/**
+			 * Shrinking border system
+			 */
+			if (gameMode == 1) {
+
+				border = new Rectangle(borderPosX, borderPosY, borderPosWidth,
+						borderPosHeight);
+				if (gameState.getCurTick() < 5) {
+
+					borderPosX = 32;
+					borderPosY = 50;
+					borderPosWidth = 1200;
+					borderPosHeight = 896;
+
+				}
+
+				if (gameState.getCurTick() % 150 == 0) {
+					borderPosX += 2;
+					borderPosY += 2;
+					borderPosWidth -= 4;
+					borderPosHeight -= 4;
+				}
 			}
 
 			if (gameMode == 4) {
@@ -694,6 +720,20 @@ public class SnakeGame implements Game {
 			if (gameState.getCurTick() < 15) {
 				return;// return to the menu before round 0 flashes on screen
 			}
+			if (gameState.getCurTick() % 150 == 0) {
+				countdown -= 1;
+			}
+			g.setColor(rainbow);
+			g.setFont(new Font("Dialog", Font.PLAIN, 36));
+			g.drawString("Starting in:", 550, 400);
+			if (countdown == 3) {
+				g.setColor(Color.GREEN);
+			} else if (countdown == 2) {
+				g.setColor(Color.yellow);
+			} else if (countdown == 1) {
+				g.setColor(Color.red);
+			}
+			g.drawString(String.valueOf(countdown), 610, 440);
 			g.setColor(Color.ORANGE);
 			g.setFont(new Font("Dialog", Font.PLAIN, 12));
 			g.drawString(message, 300, 400);
@@ -994,8 +1034,6 @@ public class SnakeGame implements Game {
 
 		} else if (gameState.inState(DEAD)) {
 
-			System.out.println("Snek1: " + snek1IsDead + "Snek2: "
-					+ snek2IsDead);
 			if (snek1IsDead) {
 				snek1.draw(g, 1, dead);
 			} else {
@@ -1014,34 +1052,20 @@ public class SnakeGame implements Game {
 					} else {
 						snek2.draw(g, 1, rainbow);
 					}
-
-					// if (whowon == 2) {
-					// snek2.draw(g, 2, dead);
-					//
-					// }
 				} else {
 					canDrawSnek2 = canDrawSnek2;
 				}
 			}
-			// g.setColor(Color.RED);
-			// g.drawString("AYY LMAO :^)", 500, 400);
-			// g.drawString(message, 600 + messagePos.x, 400);
 			/**
 			 * 5 seconds of leaving snake trail
 			 */
 
-			g.setColor(Color.RED);
-			g.drawString("AYY LMAO :^)", 500, 400);
+			g.setColor(rainbow);
+			g.setFont(new Font("Dialog", Font.PLAIN, 24));
+			g.drawString("Better luck next time", 525, 425);
 			g.drawString(message, 600 + messagePos.x, 400);
 
-			// YOUR CODE GOES HERE..
-			// render objects for gameState.DEAD
-
 		}
-
-		// YOUR CODE GOES HERE..
-		// render game objects for any game state
-
 	}
 
 	/**
@@ -1057,8 +1081,5 @@ public class SnakeGame implements Game {
 	public Graphics2D getGraphics2D() {
 		return mg.getGraphics2D();
 	}
-
-	// YOUR CODE GOES HERE..
-	// define as many methods as you need
 
 }
