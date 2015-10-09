@@ -151,7 +151,6 @@ public class SnakeGame implements Game {
 		/**
 		 * Border cords, multiple of 8 1200 // 150 896 // 112
 		 */
-		// border = new Rectangle(32, 50, 1200, 896);
 
 		round--;
 		if (round == 0) {
@@ -162,10 +161,6 @@ public class SnakeGame implements Game {
 		/**
 		 * Select your GameMode message here
 		 */
-		// message =
-		// "Hello, For player 1 push joystick left | For co-op 2 player push right | For co-op comp push up | For Tron push down |";
-		// message2 =
-		// "For SinglePlayer Press 1, For Co-Op press 2, For Co-Op competitive press 3 and for tron press 4";
 		messagePos2.x = 0;
 		messagePos.x = 0;
 
@@ -198,8 +193,6 @@ public class SnakeGame implements Game {
 				countdown = 3;
 			}
 
-			// 320, 275, 600, 448
-			// 32, 50, 1200, 896
 			borderPosX = 320;
 			borderPosY = 275;
 			borderPosWidth = 600;
@@ -220,30 +213,13 @@ public class SnakeGame implements Game {
 					|| menuSnek.head.y > border.getMaxY()
 					|| menuSnek.head.x > border.getMaxX()
 					|| menuSnek.head.x < border.getMinX()) {
-
+				// do nothing
 			}
 
 			/**
 			 * Game mode selecting system
 			 */
-
-			// message2 =
-			// "For SinglePlayer Press 1, For Co-Op press 2, For Co-Op competitive press 3 and for tron press 4";
 			messagePos2.x = 0;
-			// if (kh.isLeftPressed(1)) {
-			// gameMode = 1;
-			//
-			// gameState.toState(READY);
-			// } else if (kh.isRightPressed(1)) {
-			// gameMode = 2;
-			// gameState.toState(READY);
-			// } else if (kh.isUpPressed(1)) {
-			// gameMode = 3;
-			// gameState.toState(READY);
-			// } else if (kh.isDownPressed(1)) {
-			// gameMode = 4;
-			// gameState.toState(READY);
-			// }
 
 			if (menuSnek.head.getX() < box1.getMinX()) {
 				gameMode = 1;
@@ -333,8 +309,6 @@ public class SnakeGame implements Game {
 				waitingOnResponse = false;
 
 			}
-			// snek1.directionQ.clear();
-			// snek1.setDirection(2);
 
 			/**
 			 * Messages for current game
@@ -514,18 +488,6 @@ public class SnakeGame implements Game {
 				}
 			}
 
-			// ****************************************************
-
-			// old DEATH SYSTEM
-
-			// if (modesForSnek1.contains(gameMode)
-			// && modesForSnek2.contains(gameMode)) {
-			// if (snek1IsDead == true && snek2IsDead == true) {
-			// gameState.toState(DEAD);
-			// System.out.println("2");
-			// }
-			// }
-
 			/**
 			 * THis handles death
 			 */
@@ -537,11 +499,6 @@ public class SnakeGame implements Game {
 				 */
 				if (snek1IsDead == true || snek2IsDead == true) {
 					System.out.println("Debugging here, Error: Death-004");
-					// if (gameState.getCurTick() % 750 == 0) {
-					// System.out.println("Debugging here, Error: Death-000");
-					// gameState.toState(DEAD);
-					//
-					// }
 					gameState.toState(DEAD);
 				}
 
@@ -574,8 +531,6 @@ public class SnakeGame implements Game {
 			 * because I thought it was just to complicated.
 			 */
 
-			// DEAD STATE GGEEEE
-
 		} else if (gameState.inState(DEAD)) {
 			if (tokens == 0) {
 				if (gameState.getCurTick() > 450) {
@@ -596,17 +551,7 @@ public class SnakeGame implements Game {
 
 			}
 
-			// if (round <= 1) {
-			// message = "Dead! ~ GAME OVER";
-			// }
-			//
-			// else {
-			// message = "Dead!";
-			// }
-
 		}
-
-		// snek2.direction = 2;
 
 	}
 
@@ -639,10 +584,6 @@ public class SnakeGame implements Game {
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(1));
 		if (gameState.inState(MENU)) {
-
-			// if (gameState.getCurTick() < 15) {
-			// return;// return to the menu before round 0 flashes on screen
-			// }
 
 			g.setColor(Color.BLACK);
 			g.fill(box1);
