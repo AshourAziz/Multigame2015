@@ -222,16 +222,15 @@ public class SnakeGame implements Game {
 					|| menuSnek.head.y > border.getMaxY()
 					|| menuSnek.head.x > border.getMaxX()
 					|| menuSnek.head.x < border.getMinX()) {
-		
+
 				menuSnek = new snek(500, 500, 3, 0);
-			
+
 			}
 
 			/**
 			 * Game mode selecting system
 			 */
 
-			
 			/**
 			 * MenuSnake Commands
 			 * 
@@ -669,9 +668,16 @@ public class SnakeGame implements Game {
 			if (gameState.getCurTick() < 15) {
 				return;// return to the menu before round 0 flashes on screen
 			}
-			if (gameState.getCurTick() % 150 == 0) {
+			
+			/**
+			 * This will run the countdown system, the reason it's 2.5 and not 0 is because it's taking too long
+			 * so I've set it to under 2.5 and it works fine this way
+			 */
+			if (gameState.getCurTick() % 140 < 2.5) {
+				
 				countdown -= 1;
-			}
+			} 
+			
 			g.setColor(rainbow);
 			g.setFont(new Font("Dialog", Font.PLAIN, 36));
 			g.drawString("Starting in:", 550, 400);
