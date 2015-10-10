@@ -30,7 +30,6 @@ public class SnakeGame implements Game {
 	private int borderPosHeight = 448;
 	private GameState gameState;
 	private Nip nip;
-	private int frameCount = 0;
 	private Dimension screen;// used for screen resolution
 	private Random randGen;
 	private snek snek1;
@@ -59,13 +58,6 @@ public class SnakeGame implements Game {
 	private int messageYMovement4 = 600;
 	private int messageYMovement5 = 600;
 	private int messageYMovement6 = 600;
-	private int counter = 1;
-	private Rectangle gmrec1;
-	private Rectangle gmrec2;
-	private Rectangle gmrec3;
-	private Rectangle gmrec4;
-	private int counter2 = 0;
-	private int counter3 = 0;
 	private int tokens = 2;
 	private int whowon = 0;
 	private int menuMessageXPos = 0;
@@ -96,12 +88,11 @@ public class SnakeGame implements Game {
 		 * creates the 4 boxes for menu
 		 */
 		box1 = new Rectangle(borderPosX - 27, 445, 50, 100);
-		box2 = new Rectangle(borderPosX + borderPosWidth - 20, 445, 50, 100);
-		box3 = new Rectangle(borderPosWidth - 27, 250, 100, 50);
+		box2 = new Rectangle(borderPosWidth - 27, 250, 100, 50);
+		box3 = new Rectangle(borderPosX + borderPosWidth - 20, 445, 50, 100);
+
 		box4 = new Rectangle(borderPosWidth - 27, borderPosHeight + 255, 100,
 				50);
-
-		gmrec1 = new Rectangle(50, 50, 50, 50);
 
 		/**
 		 * let's create a list for the gamemodes that snek1 and snek2 should be
@@ -202,44 +193,45 @@ public class SnakeGame implements Game {
 			message4 = "for multiplyer Casual go up ";
 			message5 = "for multiplayer competitive go right ";
 			message6 = "and for TRON go down";
+			if (menuSnek.head.x < box1.getMinX()) {
+				gameMode = 1;
+				gameState.toState(READY);
+			}
+			if (menuSnek.head.y < box2.getMinY()) {
+				gameMode = 2;
+				gameState.toState(READY);
+			}
+			if (menuSnek.head.x > box3.getMaxX()) {
+				gameMode = 3;
+				gameState.toState(READY);
+			}
+			if (menuSnek.head.y > box4.getMaxY()) {
+				gameMode = 4;
+				gameState.toState(READY);
+			}
+			messagePos2.x = 0;
+
+			canDrawMenuSnake = false;
 
 			if (menuSnek.head.intersects(box1)
-					|| menuSnek.head.intersects(box2)
 					|| menuSnek.head.intersects(box3)
+					|| menuSnek.head.intersects(box2)
 					|| menuSnek.head.intersects(box4)) {
-				// do nothing
 
 			} else if (menuSnek.head.y < border.getMinY()
 					|| menuSnek.head.y > border.getMaxY()
 					|| menuSnek.head.x > border.getMaxX()
 					|| menuSnek.head.x < border.getMinX()) {
-				// do nothing
+		
+				menuSnek = new snek(500, 500, 3, 0);
+			
 			}
 
 			/**
 			 * Game mode selecting system
 			 */
-			messagePos2.x = 0;
 
-			if (menuSnek.head.getX() < box1.getMinX()) {
-				gameMode = 1;
-				gameState.toState(READY);
-			}
-			if (menuSnek.head.getY() < box3.getMinY()) {
-				gameMode = 2;
-				gameState.toState(READY);
-			}
-			if (menuSnek.head.getX() > box2.getMinX()) {
-				gameMode = 3;
-				gameState.toState(READY);
-			}
-			if (menuSnek.head.getY() > box4.getMinY()) {
-				gameMode = 4;
-				gameState.toState(READY);
-			}
-
-			canDrawMenuSnake = false;
-
+			
 			/**
 			 * MenuSnake Commands
 			 * 
@@ -412,7 +404,7 @@ public class SnakeGame implements Game {
 				}
 
 			}
-			counter3++;
+
 			if (gameState.getCurTick() % 5 == 0) {
 
 				/**
@@ -588,9 +580,10 @@ public class SnakeGame implements Game {
 		g.draw(border);
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(1));
-		
+
 		/**
-		 * These boxes are the ones that create the entrences into the gamemode selection
+		 * These boxes are the ones that create the entrences into the gamemode
+		 * selection
 		 */
 		if (gameState.inState(MENU)) {
 
@@ -603,14 +596,14 @@ public class SnakeGame implements Game {
 			g.fill(box3);
 			// g.draw(box4);
 			g.fill(box4);
-			
-			//create menu snake
+
+			// create menu snake
 			menuSnek.draw(g, 3, Color.YELLOW);
 			/**
 			 * Flashing color and moving color system.
 			 */
-			
-			if (gameState.getCurTick() % 10 == 0) {
+
+			if (gameState.getCurTick() % 2 == 0) {
 
 				if (fontsize < 26) {
 					fontsize++;
@@ -713,8 +706,6 @@ public class SnakeGame implements Game {
 
 				if (canDrawSnek2 = true) {
 					snek2.draw(g, 2, Color.RED);
-				} else {
-					canDrawSnek2 = canDrawSnek2;
 				}
 			}
 			/**
@@ -722,7 +713,7 @@ public class SnakeGame implements Game {
 			 * 
 			 */
 			// menuMessageXPos
-			if (gameState.getCurTick() % 10 == 0) {
+			if (gameState.getCurTick() % 2 == 0) {
 
 				if (fontsize < 24) {
 					fontsize++;
@@ -734,7 +725,7 @@ public class SnakeGame implements Game {
 				}
 
 				if (messageYMovement > 25) {
-					messageYMovement -= 10;
+					messageYMovement -= 5;
 				}
 
 				if (xPosMessage2 > 700) {
@@ -746,12 +737,12 @@ public class SnakeGame implements Game {
 					// System.out.println("2");
 				}
 				if (forward2) {
-					xPosMessage2 += 10;
+					xPosMessage2 += 5;
 					// System.out.println("3");
 
 				}
 				if (!forward2) {
-					xPosMessage2 -= 10;
+					xPosMessage2 -= 5;
 					// System.out.println("4");
 				}
 
@@ -768,7 +759,7 @@ public class SnakeGame implements Game {
 			 * 
 			 */
 			// menuMessageXPos
-			if (gameState.getCurTick() % 10 == 0) {
+			if (gameState.getCurTick() % 2 == 0) {
 
 				if (fontsize < 24) {
 					fontsize++;
@@ -780,7 +771,7 @@ public class SnakeGame implements Game {
 				}
 
 				if (messageYMovement > 25) {
-					messageYMovement -= 10;
+					messageYMovement -= 5;
 				}
 
 				if (xPosMessage2 > 700) {
@@ -792,12 +783,12 @@ public class SnakeGame implements Game {
 					// System.out.println("2");
 				}
 				if (forward2) {
-					xPosMessage2 += 10;
+					xPosMessage2 += 5;
 					// System.out.println("3");
 
 				}
 				if (!forward2) {
-					xPosMessage2 -= 10;
+					xPosMessage2 -= 5;
 					// System.out.println("4");
 				}
 			}
@@ -824,9 +815,11 @@ public class SnakeGame implements Game {
 
 			if (snek1.isDead() == true) {
 				snek1IsDead = true;
+				snek1.draw(g, 1, dead);
 			} else if (modesForSnek2.contains(gameMode)) {
 				if (snek2.isDead() == true) {
 					snek2IsDead = true;
+					snek2.draw(g, 2, dead);
 				}
 			}
 

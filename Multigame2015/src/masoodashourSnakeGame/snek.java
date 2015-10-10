@@ -119,9 +119,7 @@ public class snek {
 
 	}
 
-	public void setColor(Graphics2D g, Color c) {
-		g.setColor(c);
-	}
+	
 
 	public void draw(Graphics2D g, int playerNum, Color c) {
 
