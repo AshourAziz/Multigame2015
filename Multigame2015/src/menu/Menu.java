@@ -2,14 +2,18 @@ package menu;
 
 import javax.imageio.ImageIO;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import multigame.*;
 
@@ -43,6 +47,7 @@ public class Menu {
 	private EasyReader inFileLog;
 	private EasyWriter outFileCredits;
 	private HashMap<String, Integer> creditsMap;
+	private boolean statsPrinted;
 
 	/**
 	 * constructor takes a MultiGame as a parameter
@@ -65,8 +70,26 @@ public class Menu {
 	 * load sounds and images.
 	 */
 	public void initMenu() {
+		/**
+		 * This will check if we've printed the stats at the begining of the
+		 * game if it hasn't we'll print em'.
+		 */
+
+		/**
+		 * PLEASE NOTE THIS SHOULD ALWAYS BE COMMETED OUT UNLESS YOU ARE LOOKING
+		 * TO SEE THE STATS, HOPEFULLY I CAN FIX THIS
+		 */
+		if (!statsPrinted) {
+			statsPrinted = true;
+			try {
+				this.praseLog();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 		// force garbage collection ...
-		this.praseLog();
 		sound = new Sound();
 		sound.loadSoundFiles(soundFiles);
 		gameIndex = mg.getGameIndex();
@@ -221,16 +244,62 @@ public class Menu {
 		return gameIndex;
 	}
 
-	public void praseLog() {
-		String content = null;
-		try {
-			content = new Scanner(new File("mgLog.txt")).useDelimiter("\\Z")
-					.next();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	/**
+	 * This will return the amount of times the SubString is in the String
+	 */
+	public static int count(final String string, final String substring) {
+		int count = 0;
+		int idx = 0;
+
+		while ((idx = string.indexOf(substring, idx)) != -1) {
+			idx++;
+			count++;
 		}
-		System.out.println(content);
+
+		return count;
+	}
+
+	/**
+	 * This will handle loading the stats file, Adding the entire text file into
+	 * a string. Then after it closes it, it will print the stats by looping
+	 * through all the gamemodes
+	 */
+	public String praseLog() throws IOException {
+
+		File file = new File("stats.txt");
+		StringBuilder fileContents = new StringBuilder((int) file.length());
+		Scanner scanner = new Scanner(file);
+		String lineSeparator = System.getProperty("line.seperator");
+
+		try {
+			while (scanner.hasNextLine()) {
+				fileContents.append(scanner.nextLine() + lineSeparator);
+			}
+			// System.out.println(fileContents);
+			return fileContents.toString();
+
+		} finally {
+			scanner.close();
+			System.err.println("-------------- STATS -------------");
+			for (int i = 0; i < gameList.size(); i++) {
+				String game = String.valueOf(mg.stats.get(i));
+				System.out.println(game + " -----> "
+						+ count(String.valueOf(fileContents), gameList.get(i))
+						+ " times.");
+
+			}
+			System.err.println("-------------- STATS -------------");
+
+		}
+
+	}
+
+	/**
+	 * Finds out the count of stats IDK how this works whatever
+	 */
+
+	public static int count(final String string, final char c) {
+		return count(string, String.valueOf(c));
 	}
 
 }
