@@ -673,7 +673,7 @@ public class SnakeGame implements Game {
 			 * This will run the countdown system, the reason it's 2.5 and not 0 is because it's taking too long
 			 * so I've set it to under 2.5 and it works fine this way
 			 */
-			if (gameState.getCurTick() % 140 < 2.5) {
+			if (gameState.getCurTick() % 140 == 1) {
 				
 				countdown -= 1;
 			} 

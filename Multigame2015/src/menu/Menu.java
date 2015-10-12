@@ -28,6 +28,7 @@ public class Menu {
 	private MultiGame mg;
 	private KeyHandler kh;
 	private ArrayList<String> gameList;
+	private ArrayList<Integer> currentStat;
 	private ArrayList<BufferedImage> imageList;
 	private int gameIndex;
 	private Sound sound;
@@ -59,7 +60,7 @@ public class Menu {
 		this.kh = mg.getKeyHandler();
 		this.gameIndex = mg.getGameIndex();
 		infoFont = new Font("Lucida Console", Font.BOLD, 28);
-
+		currentStat = new ArrayList<Integer>();
 		initMenu();
 
 		// sound.loadSoundFiles(soundFiles);
@@ -72,15 +73,11 @@ public class Menu {
 	public void initMenu() {
 		/**
 		 * This will check if we've printed the stats at the begining of the
-		 * game if it hasn't we'll print em'.
-		 */
-
-		/**
-		 * PLEASE NOTE THIS SHOULD ALWAYS BE COMMETED OUT UNLESS YOU ARE LOOKING
-		 * TO SEE THE STATS, HOPEFULLY I CAN FIX THIS
+		 * game if it hasn't we'll print them.
 		 */
 		if (!statsPrinted) {
 			statsPrinted = true;
+
 			try {
 				this.praseLog();
 			} catch (IOException e) {
@@ -149,7 +146,11 @@ public class Menu {
 		// draw all text
 		g.setColor(Color.YELLOW);
 		g.setFont(infoFont);
-		g.drawString("~~ Game Index ~~ " + gameIndex, 50, 50);
+
+		// g.drawString("~~ Game Index ~~ " + gameIndex, 50, 50);
+
+		g.drawString("This game has been played: " + currentStat.get(gameIndex)
+				+ " times.", 50, 50);
 
 		String line1 = "...", line2 = "....";
 
@@ -280,15 +281,23 @@ public class Menu {
 
 		} finally {
 			scanner.close();
-			System.err.println("-------------- STATS -------------");
+			// System.err.println("-------------- STATS -------------");
 			for (int i = 0; i < gameList.size(); i++) {
 				String game = String.valueOf(mg.stats.get(i));
-				System.out.println(game + " -----> "
-						+ count(String.valueOf(fileContents), gameList.get(i))
-						+ " times.");
+
+				// System.out.println(game + " -----> "
+				// + count(String.valueOf(fileContents), gameList.get(i))
+				// + " times.");
+
+				// currentStat.add(gameList.get(i) + "."
+				// + count(String.valueOf(fileContents), gameList.get(i)));
+
+				currentStat.add(count(String.valueOf(fileContents),
+						gameList.get(i)));
 
 			}
-			System.err.println("-------------- STATS -------------");
+			// System.out.println(currentStat);
+			// System.err.println("-------------- STATS -------------");
 
 		}
 
