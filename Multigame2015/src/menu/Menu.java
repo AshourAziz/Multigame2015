@@ -51,8 +51,8 @@ public class Menu {
 	private EasyWriter outFileCredits;
 	private HashMap<String, Integer> creditsMap;
 	private boolean statsPrinted;
-	Color rainbow;
 	private int counting = 0;
+	private int xPos = 0;
 
 	/**
 	 * constructor takes a MultiGame as a parameter
@@ -153,23 +153,23 @@ public class Menu {
 
 		// g.drawString("~~ Game Index ~~ " + gameIndex, 50, 50);
 
-		g.drawString("This game has been played: ", 50, 50);
-		g.setColor(rainbow);
-		g.drawString(" "  + currentStat.get(gameIndex) + " ", 522, 50);
-		g.setColor(Color.yellow);
-		g.drawString("times.", 580, 50);
-
-		if (counting % 10 == 0) {
-			Random random = new Random();
-			final float hue = random.nextFloat();
-			final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
-			final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
-			rainbow = Color.getHSBColor(hue, saturation, luminance);
+		if (currentStat.get(gameIndex) < 10) {
+			g.drawString("THIS GAME HAS BEEN PLAYED: " + "  " + currentStat.get(gameIndex) + " TIMES", 50, 50);
 		}
+		if (currentStat.get(gameIndex) < 99 && currentStat.get(gameIndex) > 9) {
+			g.drawString("THIS GAME HAS BEEN PLAYED: " + " " + currentStat.get(gameIndex) + " TIMES", 50, 50);
+		}
+		if (currentStat.get(gameIndex) > 99) {
+			g.drawString("THIS GAME HAS BEEN PLAYED: " + currentStat.get(gameIndex) + " TIMES", 50, 50);
+		}
+//		g.drawString("THIS GAME HAS BEEN PLAYED:", 50, 50);
+//		g.drawString("" + currentStat.get(gameIndex), xPos, 50);
+
 		counting++;
 
 		String line1 = "...", line2 = "....";
 
+		g.setFont(infoFont);
 		if (mg.getFreePlay()) {
 			line1 = "FREE PLAY.. ";
 			line2 = "PRESS BTN TO START SELECTED GAME..";

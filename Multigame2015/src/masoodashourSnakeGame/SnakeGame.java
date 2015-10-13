@@ -67,6 +67,9 @@ public class SnakeGame implements Game {
 	private int xPosMessage2 = 500;
 	private boolean forward2 = true;
 	Color rainbow;
+	Sound menu;
+	Sound ready;
+	Sound playing;
 
 	/**
 	 * Our array lists, please see top of construct for more usage
@@ -101,13 +104,13 @@ public class SnakeGame implements Game {
 		 * 
 		 */
 		modesForSnek1 = new ArrayList<Integer>();
-		modesForSnek1.addAll(Arrays.asList(1, 2, 3, 4));
+		modesForSnek1.addAll(Arrays.asList(1, 2, 3, 4, 5));
 		modesForSnek2 = new ArrayList<Integer>();
-		modesForSnek2.addAll(Arrays.asList(2, 3, 4));
+		modesForSnek2.addAll(Arrays.asList(2, 3, 4, 5));
 		modesForNips = new ArrayList<Integer>();
 		modesForNips.addAll(Arrays.asList(1, 2, 3));
 		modesForPvp = new ArrayList<Integer>();
-		modesForPvp.addAll(Arrays.asList(3, 4));
+		modesForPvp.addAll(Arrays.asList(3, 4, 5));
 
 		fontArray = new ArrayList<Integer>();
 		fontArray.addAll(Arrays.asList(12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
