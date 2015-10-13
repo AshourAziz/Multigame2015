@@ -2,6 +2,8 @@ package menu;
 
 import javax.imageio.ImageIO;
 
+import screensaver.ScreenSaver;
+
 import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.awt.*;
@@ -49,6 +51,8 @@ public class Menu {
 	private EasyWriter outFileCredits;
 	private HashMap<String, Integer> creditsMap;
 	private boolean statsPrinted;
+	Color rainbow;
+	private int counting = 0;
 
 	/**
 	 * constructor takes a MultiGame as a parameter
@@ -149,8 +153,20 @@ public class Menu {
 
 		// g.drawString("~~ Game Index ~~ " + gameIndex, 50, 50);
 
-		g.drawString("This game has been played: " + currentStat.get(gameIndex)
-				+ " times.", 50, 50);
+		g.drawString("This game has been played: ", 50, 50);
+		g.setColor(rainbow);
+		g.drawString(" "  + currentStat.get(gameIndex) + " ", 522, 50);
+		g.setColor(Color.yellow);
+		g.drawString("times.", 580, 50);
+
+		if (counting % 10 == 0) {
+			Random random = new Random();
+			final float hue = random.nextFloat();
+			final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
+			final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
+			rainbow = Color.getHSBColor(hue, saturation, luminance);
+		}
+		counting++;
 
 		String line1 = "...", line2 = "....";
 
