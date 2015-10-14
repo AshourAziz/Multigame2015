@@ -30,6 +30,8 @@ public class SnakeGame implements Game {
 	private int borderPosHeight = 448;
 	private GameState gameState;
 	private Nip nip;
+	private Bullet bullet1;
+	private Bullet bullet2;
 	private Dimension screen;// used for screen resolution
 	private Random randGen;
 	private snek snek1;
@@ -66,6 +68,12 @@ public class SnakeGame implements Game {
 	private boolean forward = true;
 	private int xPosMessage2 = 500;
 	private boolean forward2 = true;
+	private int snek2head = 0;
+	private int snek1head = 0;
+	private boolean bullet1Spawned;
+	private boolean bullet2Spawned;
+	private int snek1YDir = 0;
+	private int snek1XDir = 0;
 	Color rainbow;
 	Sound menu;
 	Sound ready;
@@ -193,7 +201,7 @@ public class SnakeGame implements Game {
 			borderPosHeight = 448;
 			message1 = "- Welcome -";
 			message3 = "For single player Go left ";
-			message4 = "for multiplyer Casual go up ";
+			message4 = "for snake WARFARE!!!!";
 			message5 = "for multiplayer competitive go right ";
 			message6 = "and for TRON go down";
 			if (menuSnek.head.x < box1.getMinX()) {
@@ -201,7 +209,8 @@ public class SnakeGame implements Game {
 				gameState.toState(READY);
 			}
 			if (menuSnek.head.y < box2.getMinY()) {
-				gameMode = 2;
+				// gameMode = 2; for casual
+				gameMode = 5;
 				gameState.toState(READY);
 			}
 			if (menuSnek.head.x > box3.getMaxX()) {
@@ -302,6 +311,12 @@ public class SnakeGame implements Game {
 				canDrawSnek2 = true;
 				waitingOnResponse = false;
 
+			} else if (gameMode == 5) {
+				snek1 = new snek(100, 500, 1, 4);
+				snek2 = new snek(1200, 500, 2, 4);
+				canDrawSnek1 = true;
+				canDrawSnek2 = true;
+				waitingOnResponse = false;
 			}
 
 			/**
@@ -390,6 +405,9 @@ public class SnakeGame implements Game {
 				}
 			}
 
+			/**
+			 * Tron speed boost system.
+			 */
 			if (gameMode == 4) {
 				if (kh.isBtn1Pressed(1)) {
 					if (gameState.getCurTick() % 4 == 0) {
@@ -671,16 +689,17 @@ public class SnakeGame implements Game {
 			if (gameState.getCurTick() < 15) {
 				return;// return to the menu before round 0 flashes on screen
 			}
-			
+
 			/**
-			 * This will run the countdown system, the reason it's 2.5 and not 0 is because it's taking too long
-			 * so I've set it to under 2.5 and it works fine this way
+			 * This will run the countdown system, the reason it's 2.5 and not 0
+			 * is because it's taking too long so I've set it to under 2.5 and
+			 * it works fine this way
 			 */
 			if (gameState.getCurTick() % 140 == 1) {
-				
+
 				countdown -= 1;
-			} 
-			
+			}
+
 			g.setColor(rainbow);
 			g.setFont(new Font("Dialog", Font.PLAIN, 36));
 			g.drawString("Starting in:", 550, 400);
@@ -763,6 +782,44 @@ public class SnakeGame implements Game {
 					messageYMovement);
 
 		} else if (gameState.inState(PLAYING)) {
+
+			/**
+			 * Snake Warefare bullet system
+			 */
+
+			/**
+			 * Doesn't need an array list one bullet per person on the screen at
+			 * once (bullet1) and (bullet2)
+			 * 
+			 * Setup the bullet to allow it to be created at a set x & y. - DONE
+			 * 
+			 * 
+			 */
+			
+			
+			if (kh.isBtn1Pressed(1)) {
+				bullet1Spawned = true;
+			}
+			if (kh.isBtn1Pressed(2)) {
+				bullet2Spawned = true;
+			}
+			
+			if (bullet1Spawned) {
+				if (snek1.direction == 4) {
+					
+				} else if (snek1.direction == 8) {
+					
+					
+				} else if (snek1.direction == 6) {
+					
+					
+				} else if (snek1.direction == 2) {
+					
+					
+				}
+				bullet1.setPosition(snek1.head.x + snek1YDir, snek2.head.y + snek1XDir, snek1.direction);
+			}
+
 			/**
 			 * FLASHING COLORS
 			 * 

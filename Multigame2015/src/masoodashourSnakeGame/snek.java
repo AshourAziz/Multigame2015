@@ -14,7 +14,7 @@ import static masoodashourSnakeGame.GameState.*;
 // tron - If tron no nibbles and no minus body
 public class snek {
 	int size;
-	
+
 	int direction;
 	int bodyAdd;
 	Rectangle head;
@@ -69,7 +69,6 @@ public class snek {
 			directionQ.remove(0);
 
 		}
-		
 
 		if (direction == 4) {
 			head.x -= size;
@@ -96,9 +95,11 @@ public class snek {
 
 		if (gm == 1) {
 			bodyAdd += 10;
+		} else if (gm == 5) {
+			// Do nothing because gameMode 5 is the bullet gamemode.
 		} else {
-			bodyAdd += 5;
 		}
+		bodyAdd += 5;
 	}
 
 	public void setDirection(int dirVal) {
@@ -118,8 +119,6 @@ public class snek {
 		}
 
 	}
-
-	
 
 	public void draw(Graphics2D g, int playerNum, Color c) {
 
