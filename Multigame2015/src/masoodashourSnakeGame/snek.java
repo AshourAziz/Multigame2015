@@ -42,8 +42,8 @@ public class snek {
 
 	}
 
-	public void getDirection(int d) {
-		d = direction;
+	public int getDirection() {
+		return direction;
 	}
 
 	public void getHead(Rectangle h) {

@@ -70,10 +70,10 @@ public class SnakeGame implements Game {
 	private boolean forward2 = true;
 	private int snek2head = 0;
 	private int snek1head = 0;
-	private boolean bullet1Spawned;
-	private boolean bullet2Spawned;
-	private int snek1YDir = 0;
-	private int snek1XDir = 0;
+	private boolean bullet1Spawned = false;
+	private boolean bullet2Spawned = false;
+	private int bullety = 0;
+	private int bulletx = 0;
 	Color rainbow;
 	Sound menu;
 	Sound ready;
@@ -209,8 +209,8 @@ public class SnakeGame implements Game {
 				gameState.toState(READY);
 			}
 			if (menuSnek.head.y < box2.getMinY()) {
-				// gameMode = 2; for casual
-				gameMode = 5;
+				gameMode = 2; //for casual
+				//gameMode = 5; BULLET WAREFARE
 				gameState.toState(READY);
 			}
 			if (menuSnek.head.x > box3.getMaxX()) {
@@ -795,29 +795,50 @@ public class SnakeGame implements Game {
 			 * 
 			 * 
 			 */
-			
-			
-			if (kh.isBtn1Pressed(1)) {
-				bullet1Spawned = true;
-			}
-			if (kh.isBtn1Pressed(2)) {
-				bullet2Spawned = true;
-			}
-			
-			if (bullet1Spawned) {
-				if (snek1.direction == 4) {
-					
-				} else if (snek1.direction == 8) {
-					
-					
-				} else if (snek1.direction == 6) {
-					
-					
-				} else if (snek1.direction == 2) {
-					
-					
+
+			if (gameMode == 5) {
+
+				if (kh.wasBtn1JustPressed(1)) {
+
+					bullet1 = new Bullet(snek1.head.x, snek1.head.y,
+							snek1.getDirection());
+
+					bullet1Spawned = true;
 				}
-				bullet1.setPosition(snek1.head.x + snek1YDir, snek2.head.y + snek1XDir, snek1.direction);
+				if (kh.wasBtn1JustPressed(2)) {
+					bullet2 = new Bullet(snek2.head.x, snek2.head.y,
+							snek2.getDirection());
+
+					bullet2Spawned = true;
+				}
+
+				if (bullet1Spawned == true) {
+					bullet1.draw(g);
+					bullet1.move();
+					for (int a = 0; a < snek2.body.size(); a++) {
+						if (a < snek2.body.size()) {
+							if (bullet1.body.intersects(snek1.body.get(a))) {
+								// snek2IsDead = true;
+
+							}
+
+						}
+					}
+				}
+				if (bullet2Spawned == true) {
+					bullet2.draw(g);
+					bullet2.move();
+					for (int a = 0; a < snek1.body.size(); a++) {
+						if (a < snek1.body.size()) {
+							if (bullet1.body.intersects(snek1.body.get(a))) {
+								snek1.body.remove(a);
+
+							}
+
+						}
+					}
+				}
+
 			}
 
 			/**

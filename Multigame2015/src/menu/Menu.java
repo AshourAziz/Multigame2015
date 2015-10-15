@@ -2,26 +2,18 @@ package menu;
 
 import javax.imageio.ImageIO;
 
-import screensaver.ScreenSaver;
-
-import com.sun.xml.internal.ws.util.StringUtils;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 import multigame.*;
 
 /**
- * class Menu handles the choosing and launching of a game. It displays each
- * game screenshot (600x600 image) in a scrolling list
+ * class Menu handles the choosing and lanching of a game. It displays each game
+ * screenshot (600x600 image) in a scrolling list
  */
 public class Menu {
 
@@ -53,18 +45,24 @@ public class Menu {
 	private boolean statsPrinted;
 	private int counting = 0;
 	private int xPos = 0;
+	public static String statsString = "stats.txt";
+	public static ArrayList<String> stats;
+	private String game = "";
 
 	/**
 	 * constructor takes a MultiGame as a parameter
 	 */
 	public Menu(MultiGame mg) {
+		stats = new ArrayList<String>();
+		currentStat = new ArrayList<Integer>();
+		statsString = "stats.txt";
+		game = "";
 		this.mg = mg;
 		this.gameList = mg.getGameList();
 		this.imageList = mg.getImageList();
 		this.kh = mg.getKeyHandler();
 		this.gameIndex = mg.getGameIndex();
 		infoFont = new Font("Lucida Console", Font.BOLD, 28);
-		currentStat = new ArrayList<Integer>();
 		initMenu();
 
 		// sound.loadSoundFiles(soundFiles);
@@ -154,16 +152,22 @@ public class Menu {
 		// g.drawString("~~ Game Index ~~ " + gameIndex, 50, 50);
 
 		if (currentStat.get(gameIndex) < 10) {
-			g.drawString("THIS GAME HAS BEEN PLAYED: " + "  " + currentStat.get(gameIndex) + " TIMES", 50, 50);
+			g.drawString(
+					"THIS GAME HAS BEEN PLAYED: " + "  "
+							+ currentStat.get(gameIndex) + " TIMES", 50, 50);
 		}
 		if (currentStat.get(gameIndex) < 99 && currentStat.get(gameIndex) > 9) {
-			g.drawString("THIS GAME HAS BEEN PLAYED: " + " " + currentStat.get(gameIndex) + " TIMES", 50, 50);
+			g.drawString(
+					"THIS GAME HAS BEEN PLAYED: " + " "
+							+ currentStat.get(gameIndex) + " TIMES", 50, 50);
 		}
 		if (currentStat.get(gameIndex) > 99) {
-			g.drawString("THIS GAME HAS BEEN PLAYED: " + currentStat.get(gameIndex) + " TIMES", 50, 50);
+			g.drawString(
+					"THIS GAME HAS BEEN PLAYED: " + currentStat.get(gameIndex)
+							+ " TIMES", 50, 50);
 		}
-//		g.drawString("THIS GAME HAS BEEN PLAYED:", 50, 50);
-//		g.drawString("" + currentStat.get(gameIndex), xPos, 50);
+		// g.drawString("THIS GAME HAS BEEN PLAYED:", 50, 50);
+		// g.drawString("" + currentStat.get(gameIndex), xPos, 50);
 
 		counting++;
 
@@ -282,39 +286,30 @@ public class Menu {
 	 * through all the gamemodes
 	 */
 	public String praseLog() throws IOException {
-
 		File file = new File("stats.txt");
 		StringBuilder fileContents = new StringBuilder((int) file.length());
 		Scanner scanner = new Scanner(file);
 		String lineSeparator = System.getProperty("line.seperator");
-
 		try {
 			while (scanner.hasNextLine()) {
 				fileContents.append(scanner.nextLine() + lineSeparator);
 			}
-			// System.out.println(fileContents);
 			return fileContents.toString();
 
 		} finally {
 			scanner.close();
-			// System.err.println("-------------- STATS -------------");
 			for (int i = 0; i < gameList.size(); i++) {
-				String game = String.valueOf(mg.stats.get(i));
-
+				// game = String.valueOf(stats.get(i));
 				// System.out.println(game + " -----> "
 				// + count(String.valueOf(fileContents), gameList.get(i))
 				// + " times.");
 
 				// currentStat.add(gameList.get(i) + "."
 				// + count(String.valueOf(fileContents), gameList.get(i)));
-
 				currentStat.add(count(String.valueOf(fileContents),
 						gameList.get(i)));
 
 			}
-			// System.out.println(currentStat);
-			// System.err.println("-------------- STATS -------------");
-
 		}
 
 	}

@@ -125,7 +125,6 @@ public class MultiGame extends JFrame implements Runnable {
 	private int fps = 150;
 
 	private ArrayList<String> gameList;
-	public ArrayList<String> stats;
 	// private ArrayList<Integer> gameListFreq;
 
 	private ArrayList<BufferedImage> imageList;
@@ -136,7 +135,6 @@ public class MultiGame extends JFrame implements Runnable {
 	private int credits;
 
 	private String logFileName = "";
-	private String Stats = " ";
 	private EasyWriter outFileLog;
 
 	private boolean freePlay = false;
@@ -177,21 +175,11 @@ public class MultiGame extends JFrame implements Runnable {
 		menu = new Menu(this);
 
 		logFileName = "mgLog.txt";
-		Stats = "stats.txt";
 		try {
 			File f;
 			f = new File(logFileName);
 			if (!f.exists()) {
 				f.createNewFile();
-			}
-		} catch (IOException e) {
-			// e.printStackTrace();
-		}
-		try {
-			File g;
-			g = new File(Stats);
-			if (!g.exists()) {
-				g.createNewFile();
 			}
 		} catch (IOException e) {
 			// e.printStackTrace();
@@ -313,7 +301,6 @@ public class MultiGame extends JFrame implements Runnable {
 
 	private void initGameList() {
 		gameList = new ArrayList<String>();
-		stats = new ArrayList<String>();
 
 		File dir = new File("menuimages");
 		// menuimages resides in the src folder in eclipse project folder
@@ -343,7 +330,7 @@ public class MultiGame extends JFrame implements Runnable {
 				String packageName = str;
 				String className = str + "." + str.substring(firstCapPos);
 				gameList.add(className);
-				stats.add(str);
+				//Menu.stats.add(str);
 
 			}
 		}
@@ -518,9 +505,10 @@ public class MultiGame extends JFrame implements Runnable {
 					 * We will write to the stats file every time a game is
 					 * launched
 					 */
-					outFileLog = new EasyWriter(Stats, "app");
-					outFileLog.println(gameList.get(gameIndex));
-					outFileLog.close();
+						outFileLog = new EasyWriter(Menu.statsString, "app");
+						outFileLog.println(gameList.get(gameIndex));
+						outFileLog.close();
+					
 
 					gameState.toState(gameState.INITGAME);
 				} catch (Exception e) {
