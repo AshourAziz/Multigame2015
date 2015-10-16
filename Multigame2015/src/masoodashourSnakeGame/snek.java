@@ -26,7 +26,7 @@ public class snek {
 	public snek(int x, int y, int playerNum, int gameMode) {
 		gm = gameMode;
 		pn = playerNum;
-		size = 8;
+		size = 12;
 		if (playerNum == 1) {
 			direction = 6;
 		}
@@ -124,12 +124,17 @@ public class snek {
 
 		g.setColor(c);
 
+		g.fill(head);
 		g.draw(head);
 
 		for (int i = 0; i < body.size(); i++) {
 
-			g.draw(body.get(i));
-
+			if (gm != 4) {
+				g.draw(body.get(i));
+			} else {
+				g.fill(body.get(i));
+				g.draw(body.get(i));
+			}
 		}
 
 	}

@@ -75,9 +75,7 @@ public class SnakeGame implements Game {
 	private int bullety = 0;
 	private int bulletx = 0;
 	Color rainbow;
-	Sound menu;
-	Sound ready;
-	Sound playing;
+	private Sound sound = new Sound();
 
 	/**
 	 * Our array lists, please see top of construct for more usage
@@ -139,6 +137,10 @@ public class SnakeGame implements Game {
 		screen = new Dimension(1280, 1024);// 1280x1024 for cabinet two player
 											// game
 
+		String soundList[] = { "convicted.wav", "mainmenu.wav", "pacman.wav" };
+		sound = new Sound();
+		sound.loadSoundFiles(soundList);
+
 		initRound();
 	}
 
@@ -182,6 +184,7 @@ public class SnakeGame implements Game {
 
 		if (gameState.inState(MENU)) {
 			if (gameState.getCurTick() == 1) {
+				sound.stop(2);
 				menuSnek = new snek(500, 500, 3, 0);
 				/**
 				 * So the flashing colors start in the center every time
@@ -193,24 +196,25 @@ public class SnakeGame implements Game {
 				messageYMovement6 = 600;
 				forward = true;
 				countdown = 3;
+				sound.play(1, true);
 			}
 
 			borderPosX = 320;
 			borderPosY = 275;
 			borderPosWidth = 600;
 			borderPosHeight = 448;
-			message1 = "- Welcome -";
-			message3 = "For single player Go left ";
-			message4 = "for snake WARFARE!!!!";
-			message5 = "for multiplayer competitive go right ";
-			message6 = "and for TRON go down";
+			message1 = "       = - Welcome - =";
+			message3 = "For single player go left ";
+			message4 = "for multiplayer CO-OP go up!";
+			message5 = "for multiplayer competitive go right!";
+			message6 = "and for = - TRON - = go down";
 			if (menuSnek.head.x < box1.getMinX()) {
 				gameMode = 1;
 				gameState.toState(READY);
 			}
 			if (menuSnek.head.y < box2.getMinY()) {
-				gameMode = 2; //for casual
-				//gameMode = 5; BULLET WAREFARE
+				gameMode = 2; // for casual
+				// gameMode = 5; BULLET WAREFARE
 				gameState.toState(READY);
 			}
 			if (menuSnek.head.x > box3.getMaxX()) {
@@ -249,19 +253,19 @@ public class SnakeGame implements Game {
 			 */
 
 			if (gameState.getCurTick() % 5 == 0) {
-				if (kh.isDownPressed(1)) {
+				if (kh.isDownPressed(2)) {
 					menuSnek.setDirection(2);
 					menuSnek.move();
 				}
-				if (kh.isLeftPressed(1)) {
+				if (kh.isLeftPressed(2)) {
 					menuSnek.setDirection(4);
 					menuSnek.move();
 				}
-				if (kh.isRightPressed(1)) {
+				if (kh.isRightPressed(2)) {
 					menuSnek.setDirection(6);
 					menuSnek.move();
 				}
-				if (kh.isUpPressed(1)) {
+				if (kh.isUpPressed(2)) {
 					menuSnek.setDirection(8);
 					menuSnek.move();
 				}
@@ -269,6 +273,7 @@ public class SnakeGame implements Game {
 		}
 
 		if (gameState.inState(READY)) {
+			sound.stop(1);
 
 			borderPosX = 32;
 			borderPosY = 50;
@@ -337,7 +342,7 @@ public class SnakeGame implements Game {
 			} else if (gameMode == 4) {
 				currentGame = "You are now playing TRON";
 
-			} else if (kh.wasRightJustPressed(1)) {
+			} else if (kh.wasRightJustPressed(2)) {
 				messagePos.x += 5;
 			}
 
@@ -359,6 +364,9 @@ public class SnakeGame implements Game {
 
 			if (gameState.getCurTick() == 1) {
 				initRound();
+			}
+			if (gameState.getCurTick() == 1) {
+				sound.play(0, true);
 			}
 
 		} else if (gameState.inState(PLAYING)) {
@@ -409,13 +417,13 @@ public class SnakeGame implements Game {
 			 * Tron speed boost system.
 			 */
 			if (gameMode == 4) {
-				if (kh.isBtn1Pressed(1)) {
+				if (kh.isBtn1Pressed(2)) {
 					if (gameState.getCurTick() % 4 == 0) {
 						snek1.move();
 					}
 
 				}
-				if (kh.isBtn1Pressed(2)) {
+				if (kh.isBtn1Pressed(1)) {
 					if (gameState.getCurTick() % 4 == 0) {
 						snek2.move();
 
@@ -474,15 +482,15 @@ public class SnakeGame implements Game {
 			 * 
 			 */
 
-			if (kh.wasDownJustPressed(1)) {
+			if (kh.wasDownJustPressed(2)) {
 				snek1.setDirection(2);
-			} else if (kh.wasLeftJustPressed(1)) {
+			} else if (kh.wasLeftJustPressed(2)) {
 				snek1.setDirection(4);
 
-			} else if (kh.wasRightJustPressed(1)) {
+			} else if (kh.wasRightJustPressed(2)) {
 				snek1.setDirection(6);
 
-			} else if (kh.wasUpJustPressed(1)) {
+			} else if (kh.wasUpJustPressed(2)) {
 				snek1.setDirection(8);
 
 			}
@@ -491,16 +499,16 @@ public class SnakeGame implements Game {
 			 * Player 2 controls
 			 */
 			if (modesForSnek2.contains(gameMode)) {
-				if (kh.wasDownJustPressed(2)) {
+				if (kh.wasDownJustPressed(1)) {
 					snek2.setDirection(2);
 				}
-				if (kh.wasLeftJustPressed(2)) {
+				if (kh.wasLeftJustPressed(1)) {
 					snek2.setDirection(4);
 				}
-				if (kh.wasRightJustPressed(2)) {
+				if (kh.wasRightJustPressed(1)) {
 					snek2.setDirection(6);
 				}
-				if (kh.wasUpJustPressed(2)) {
+				if (kh.wasUpJustPressed(1)) {
 					snek2.setDirection(8);
 				}
 			}
@@ -549,6 +557,22 @@ public class SnakeGame implements Game {
 			 */
 
 		} else if (gameState.inState(DEAD)) {
+
+			if (gameState.getCurTick() == 1) {
+				sound.play(2, false);
+			} else if (gameState.getCurTick() % 150 == 0
+					&& gameState.getCurTick() != 450) {
+				sound.play(2, false);
+			}
+
+			if (gameState.getCurTick() > 5) {
+				sound.stop(0);
+
+			}
+			if (gameState.getCurTick() % 150 == 0) {
+				sound.play(2, false);
+			}
+
 			if (tokens == 0) {
 				if (gameState.getCurTick() > 450) {
 					gameOver = true;
@@ -655,8 +679,11 @@ public class SnakeGame implements Game {
 
 			}
 
-			g.setColor(rainbow);
+			g.setColor(Color.YELLOW);
 			g.setFont(new Font("Dialog", Font.PLAIN, 30));
+			g.drawString("You can play " + String.valueOf(tokens + 1) + "  more game types",
+					650, 850);
+			g.setColor(rainbow);
 			if (messageYMovement6 < 181) {
 
 				if (xPosMessage1 > 600) {
@@ -798,14 +825,20 @@ public class SnakeGame implements Game {
 
 			if (gameMode == 5) {
 
-				if (kh.wasBtn1JustPressed(1)) {
+				/**
+				 * STARTING HERE
+				 * 
+				 * 
+				 * 
+				 */
+				if (kh.wasBtn1JustPressed(2)) {
 
 					bullet1 = new Bullet(snek1.head.x, snek1.head.y,
 							snek1.getDirection());
 
 					bullet1Spawned = true;
 				}
-				if (kh.wasBtn1JustPressed(2)) {
+				if (kh.wasBtn1JustPressed(1)) {
 					bullet2 = new Bullet(snek2.head.x, snek2.head.y,
 							snek2.getDirection());
 
@@ -1069,11 +1102,20 @@ public class SnakeGame implements Game {
 			g.drawString(message, 600 + messagePos.x, 400);
 
 		} else if (gameState.inState(DEAD)) {
+			if (modesForSnek2.contains(gameMode)) {
 
-			if (snek1IsDead) {
-				snek1.draw(g, 1, dead);
+				if (snek1IsDead == true) {
+					snek1.draw(g, 1, dead);
+				} else {
+					snek1.draw(g, 1, rainbow);
+				}
+				if (snek2IsDead == true) {
+					snek2.draw(g, 2, dead);
+				} else {
+					snek2.draw(g, 1, rainbow);
+				}
 			} else {
-				snek1.draw(g, 1, rainbow);
+				snek1.draw(g, 1, dead);
 			}
 
 			/**
